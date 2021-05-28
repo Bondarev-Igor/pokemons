@@ -1,0 +1,12 @@
+.wrapperCard {
+    display: flex;
+    flex-direction: column;
+    padding: 15px
+}
+
+.picturePokemon {
+    height: 341px;
+    width: 275px;
+    background-color:rgb(10, 114, 218);
+}
+
