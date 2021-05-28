@@ -1,4 +1,4 @@
-import './CardOfPokemon.css'
+import './Card.css'
 
 export const CardOfPokemon = () => {
     return <div className = "wrapperCard">

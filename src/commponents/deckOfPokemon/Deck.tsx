@@ -1,5 +1,5 @@
-import "./DeckOfPokemon.css";
-import { CardOfPokemon } from "../cardOfPokemon/CardOfPokemon";
+import "./Deck.css";
+import { CardOfPokemon } from "../cardOfPokemon/Card";
 import pokoLogo from './logoPok.jpg'
 import { useEffect } from "react";
 import { pokemonAPI } from '../../api/pokemonApi'
