@@ -4,14 +4,14 @@ export type PokemonType = {
   'url': string;
 };
 
-export type AppRootStateTye = {
+export type PokemonsStateTye = {
     "count" : null | number
     "next" : null | string
     "previous" : null | string
     "results" : null | PokemonType[]
 }
 
-const initialState: AppRootStateTye = {
+const initialState: PokemonsStateTye = {
     "count": null,
     "next" : null,
     "previous" : null,
@@ -20,7 +20,7 @@ const initialState: AppRootStateTye = {
 
 type ActionType = SetPokemonsACType
 
-const pokemonsReducer = (state: AppRootStateTye = initialState, action: ActionType): AppRootStateTye => {
+const pokemonsReducer = (state: PokemonsStateTye = initialState, action: ActionType): PokemonsStateTye => {
   switch (action.type) {
     case "SET-POKEMONS":
        return { ...state, results: [...action.pokemons] };
