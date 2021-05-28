@@ -26,11 +26,12 @@
 .pikachu {
     
     width: 900px;
-        display: flex;
+    display: flex;
     align-items: center;
     align-content: center; 
     justify-content: center; 
     overflow: auto;
+    margin: 0 auto;
 }
 
 

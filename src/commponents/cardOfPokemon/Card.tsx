@@ -1,10 +1,13 @@
-import './Card.css'
+import './Card.css';
 
-export const CardOfPokemon = () => {
-    return <div className = "wrapperCard">
-        <div className = "picturePokemon">Picture</div>
-        <span>Name Pokemon</span>
+export const CardOfPokemon = (props: any) => {
+  const { match } = props;
+  const { params } = match;
+  const { pokemonId } = params;
+  return (
+    <div className="wrapperCard">
+      <div className="picturePokemon">{`This is page of ${pokemonId} page`}</div>
+      <span>Name Pokemon</span>
     </div>
-
-}
-
+  );
+};
