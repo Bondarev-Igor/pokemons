@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { CardOfPokemon } from '../cardOfPokemon/Card';
 import pokoLogo from './logoPok.jpg';
 
-import { pokemonAPI } from '../../api/pokemonApi';
+import { getPokemons } from '../../api/pokemonApi';
 import { setPokemonsAC } from '../../bll/pokemonReducer';
 
 import './Deck.css';
@@ -12,7 +12,7 @@ import './Deck.css';
 export const DeckOfPokemon = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    pokemonAPI.getPokemons().then((res) => {
+    getPokemons().then((res) => {
       console.log(res.data.results);
       dispatch(setPokemonsAC(res.data.results));
     });

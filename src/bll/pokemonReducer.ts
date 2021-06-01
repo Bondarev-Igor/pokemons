@@ -3,14 +3,14 @@ export type PokemonType = {
   'url': string;
 };
 
-export type PokemonsStateType = {
+export type PokStateType = {
   'count' : null | number
   'next' : null | string
   'previous' : null | string
   'results' : null | PokemonType[]
 };
 
-const initialState: PokemonsStateType = {
+const initialState: PokStateType = {
   count: null,
   next: null,
   previous: null,
@@ -19,7 +19,7 @@ const initialState: PokemonsStateType = {
 
 type ActionType = SetPokemonsACType;
 
-const pokemonsReducer = (state: PokemonsStateType = initialState, action: ActionType): PokemonsStateType => {
+const pokemonsReducer = (state: PokStateType = initialState, action: ActionType): PokStateType => {
   switch (action.type) {
     case 'SET-POKEMONS':
       return { ...state, results: [...action.pokemons] };
