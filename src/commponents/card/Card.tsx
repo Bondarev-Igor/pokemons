@@ -2,16 +2,17 @@ import React from 'react';
 
 import './Card.css';
 
-type PropsType = {
-  id: string
+export type CardPropsType = {
+  id: string;
 };
 
-export const Card: React.FC<PropsType> = ({ id }) => (
-  <div className="wrapperCard">
-    <div className="picturePokemon">{`This is page of ${id}`}</div>
-    <span>Name Pokemon</span>
-  </div>
-);
+export const Card: React.FC<CardPropsType> = ({ id }) => (
   // const { match } = props;
   // const { params } = match;
   // const { pokemonId } = params;
+  <div className="wrapperCard">
+    <div className="picturePokemon">
+      <div>{id}</div>
+    </div>
+  </div>
+);

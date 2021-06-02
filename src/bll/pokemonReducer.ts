@@ -1,6 +1,9 @@
 // eslint-disable-next-line import/no-cycle
 import { getPokemons } from 'api/pokemonApi';
 import { Dispatch } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+// eslint-disable-next-line import/no-cycle
+import { AppRootStateType } from './store';
 
 export type PokemonType = {
   'name': string;
@@ -18,7 +21,7 @@ const initialState: PokStateType = {
   count: null,
   next: null,
   previous: null,
-  results: null,
+  results: [],
 };
 
 type ActionType = SetPokemonsACType;
@@ -39,18 +42,13 @@ export type SetPokemonsACType = {
 
 export const setPokemonsAC = (pokemons: PokemonType[]) => ({ type: 'SET-POKEMONS', pokemons } as const);
 
-export const fetchPokemonsTC = () => (dispatch: Dispatch<ActionType>) => {
+export const fetchPokemonsTC = (): ThunkAction<void, AppRootStateType, unknown, ActionType> => (
+  dispatch: Dispatch,
+) => {
   getPokemons()
     .then((res) => {
       dispatch(setPokemonsAC(res.data.results));
     });
 };
-
-// export const fetchPokemonsThunk = (dispatch: Dispatch) => {
-//   getPokemons()
-//     .then((res) => {
-//       dispatch(setPokemonsAC(res.data.results));
-//     });
-// };
 
 export default pokemonsReducer;

@@ -8,6 +8,8 @@
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
 }
 .sales {
     height: 45px;

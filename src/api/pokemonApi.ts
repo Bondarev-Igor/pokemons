@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+// eslint-disable-next-line import/no-cycle
 import { PokStateType } from 'bll/pokemonReducer';
 
 const instance = axios.create({

@@ -21,13 +21,10 @@ export const Deck: React.FC = () => {
   useEffect(() => {
     const thunk = fetchPokemonsTC();
     dispatch(thunk);
-  });
+  }, []);
 
-  const pokemons = useSelector<AppRootStateType, Array<PokemonType>>((state): any => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    state.pokemons.results;
-  });
-  console.log(pokemons);
+  // eslint-disable-next-line max-len
+  const pokemons = useSelector<AppRootStateType, Array<PokemonType>>((state): PokemonType[] => state.pokemons.results);
 
   return (
     <div className="mainWrapper">
@@ -40,11 +37,11 @@ export const Deck: React.FC = () => {
       <div className="article">
         <img className="pikachu" src={pokoLogo} alt="logo" />
       </div>
-      {/* <div className="wrapperCards">
+      <div className="wrapperCards">
         {
           pokemons.map((pok) => <Card key={pok.name} id={pok.name} />)
         }
-      </div> */}
+      </div>
     </div>
   );
 };

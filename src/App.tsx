@@ -7,7 +7,7 @@ import { Card } from './commponents/card/Card';
 const App = () => (
   <div>
     <Switch>
-      <Route exact path="/" render={(props: any) => <Deck {...props} />} />
+      <Route exact path="/" render={() => <Deck />} />
       <Route exact path="/:pokemonId" render={(props: any) => <Card {...props} />} />
     </Switch>
   </div>
