@@ -2,6 +2,7 @@ import {
   applyMiddleware, combineReducers, compose, createStore,
 } from 'redux';
 import thunk from 'redux-thunk';
+// eslint-disable-next-line import/no-cycle
 import pokemonReducer from './pokemonReducer';
 
 const rootReducer = combineReducers({
