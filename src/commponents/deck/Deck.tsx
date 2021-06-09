@@ -5,7 +5,7 @@ import pokoLogo from './logoPok.jpg';
 
 import { fetchPokemonsTC, PokemonType } from '../../bll/pokemonReducer';
 
-import './Deck.css';
+import styles from './Deck.module.css';
 import { AppRootStateType } from '../../bll/store';
 import { Card } from '../card/Card';
 
@@ -27,17 +27,11 @@ export const Deck: React.FC = () => {
   const pokemons = useSelector<AppRootStateType, Array<PokemonType>>((state): PokemonType[] => state.pokemons.results);
 
   return (
-    <div className="mainWrapper">
-      {/* <div>
-        <div className="sales"></div>
-        <div className="navPok">
-          <h1>Pokemons</h1>
-        </div>
-      </div> */}
-      <div className="article">
-        <img className="pikachu" src={pokoLogo} alt="logo" />
+    <div className={styles.mainWrapper}>
+      <div className={styles.article}>
+        <img className={styles.pikachu} src={pokoLogo} alt="logo" />
       </div>
-      <div className="wrapperCards">
+      <div className={styles.wrapperCards}>
         {
           pokemons.map((pok) => <Card key={pok.name} id={pok.name} />)
         }
