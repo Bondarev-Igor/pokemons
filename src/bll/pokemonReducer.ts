@@ -6,15 +6,16 @@ import { ThunkAction } from 'redux-thunk';
 import { AppRootStateType } from './store';
 
 export type PokemonType = {
-  'name': string;
-  'url': string;
+  id : number
+  name : string;
+  image : string;
 };
 
 export type PokStateType = {
-  'count': null | number;
-  'next': null | string;
-  'previous': null | string;
-  'results': null | PokemonType[];
+  count : null | number;
+  next : null | string;
+  previous : null | string;
+  results : null | PokemonType[];
 };
 
 const initialState: PokStateType = {
@@ -37,7 +38,7 @@ const pokemonsReducer = (state: PokStateType = initialState, action: ActionType)
 
 export type SetPokemonsACType = {
   type: 'SET-POKEMONS';
-  pokemons: Array<PokemonType>;
+  pokemons: PokemonType[];
 };
 
 export const setPokemonsAC = (pokemons: PokemonType[]) => ({ type: 'SET-POKEMONS', pokemons } as const);
@@ -47,7 +48,15 @@ export const fetchPokemonsTC = (): ThunkAction<void, AppRootStateType, unknown, 
 ) => {
   getPokemons()
     .then((res) => {
-      dispatch(setPokemonsAC(res.data.results));
+      const newPokemonsData:PokemonType[] = [];
+      res.data.results.forEach((pokemon, index: number) => {
+        newPokemonsData[index] = {
+          id: index + 1,
+          name: pokemon.name,
+          image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index + 1}.png`,
+        };
+      });
+      dispatch(setPokemonsAC(newPokemonsData));
     });
 };
 

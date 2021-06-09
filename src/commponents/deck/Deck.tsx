@@ -1,22 +1,16 @@
 import React, { useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import pokoLogo from './logoPok.jpg';
+import pokoLogo from '../../images/logoPok.jpg';
 
 import { fetchPokemonsTC, PokemonType } from '../../bll/pokemonReducer';
 
-import styles from './Deck.module.css';
+import styles from './Deck.module.scss';
 import { AppRootStateType } from '../../bll/store';
 import { Card } from '../card/Card';
 
 export const Deck: React.FC = () => {
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   getPokemons().then((res) => {
-  //     debugger; // eslint-disable-line
-  //     dispatch(setPokemonsAC(res.data.results));
-  //   });
-  // });
 
   useEffect(() => {
     const thunk = fetchPokemonsTC();
@@ -24,8 +18,9 @@ export const Deck: React.FC = () => {
   }, []);
 
   // eslint-disable-next-line max-len
-  const pokemons = useSelector<AppRootStateType, Array<PokemonType>>((state): PokemonType[] => state.pokemons.results);
-
+  const pokemons = useSelector<AppRootStateType, PokemonType[]>((state) => state.pokemons.results);
+  // eslint-disable-next-line no-debugger
+  debugger;
   return (
     <div className={styles.mainWrapper}>
       <div className={styles.article}>
@@ -33,7 +28,9 @@ export const Deck: React.FC = () => {
       </div>
       <div className={styles.wrapperCards}>
         {
-          pokemons.map((pok) => <Card key={pok.name} id={pok.name} />)
+          pokemons.map((pok) => (
+            <Card key={pok.id} id={pok.id} name={pok.name} image={pok.image} />
+          ))
         }
       </div>
     </div>
