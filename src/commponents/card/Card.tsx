@@ -15,7 +15,7 @@ export const Card: React.FC<CardPropsType> = ({ id, name, image }) => (
   <div className={styles.wrapperCard}>
     <div className={styles.cardPokemon}>
       <div className={styles.imgPokemon}>
-        <img src={image} alt="Pikture of Pokemon" />
+        <img className={styles.picOfPokemon} src={image} alt="Piсture of Pokemon" />
       </div>
       <div className={styles.namePokemon}>
         <span>

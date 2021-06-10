@@ -53,7 +53,7 @@ export const fetchPokemonsTC = (): ThunkAction<void, AppRootStateType, unknown, 
         newPokemonsData[index] = {
           id: index + 1,
           name: pokemon.name,
-          image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index + 1}.png`,
+          image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${index + 1}.svg`,
         };
       });
       dispatch(setPokemonsAC(newPokemonsData));
