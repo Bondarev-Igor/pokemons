@@ -6,7 +6,7 @@ const instance = axios.create({
   baseURL: 'https://pokeapi.co/api/v2/pokemon/',
 });
 
-export const getPokemons = (): Promise<AxiosResponse<PokStateType>> => {
+export const getPokemons = (): any => {
   const promise = instance.get('');
   return promise;
 };
