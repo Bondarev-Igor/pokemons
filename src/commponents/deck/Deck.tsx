@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import pokoLogo from '../../images/logoPok.jpg';
 
-import { fetchPokemonsTC as fetchPokemonsTc, PokemonType } from '../../bll/pokemonReducer';
+import { fetchPokemons, PokemonType } from '../../bll/pokemonReducer';
 
 import { AppRootStateType } from '../../bll/store';
 import { Card } from '../card/Card';
@@ -13,7 +13,7 @@ export const Deck: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchPokemonsTc());
+    dispatch(fetchPokemons());
   }, [dispatch]);
 
   // eslint-disable-next-line max-len

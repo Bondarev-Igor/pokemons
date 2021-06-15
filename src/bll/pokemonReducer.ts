@@ -1,6 +1,8 @@
 // eslint-disable-next-line import/no-cycle
 import { getPokemons } from 'api/pokemonApi';
-import { call, put } from '@redux-saga/core/effects';
+import {
+  call, CallEffect, put, PutEffect,
+} from '@redux-saga/core/effects';
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 // eslint-disable-next-line import/no-cycle
@@ -46,37 +48,37 @@ export const setPokemonsAC = (pokemons: PokemonType[]) => ({ type: 'SET-POKEMONS
 
 // thunks
 type FetchPokemonTCType = ThunkAction<void, AppRootStateType, unknown, ActionType>;
-export const fetchPokemonsTC = (): FetchPokemonTCType => async (
-  dispatch: Dispatch,
-) => {
-  getPokemons()
-    .then((res) => {
-      const newPokemonsData: PokemonType[] = [];
-      res.data.results.forEach((pokemon, index: number) => {
-        newPokemonsData[index] = {
-          id: index + 1,
-          name: pokemon.name,
-          image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${index + 1}.svg`,
-        };
-      });
-      dispatch(setPokemonsAC(newPokemonsData));
-    });
-};
+// export const fetchPokemonsTC = (): FetchPokemonTCType => async (
+//   dispatch: Dispatch,
+// ) => {
+//   getPokemons()
+//     .then((res) => {
+//       const newPokemonsData: PokemonType[] = [];
+//       res.data.results.forEach((pokemon, index: number) => {
+//         newPokemonsData[index] = {
+//           id: index + 1,
+//           name: pokemon.name,
+//           image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${index + 1}.svg`,
+//         };
+//       });
+//       dispatch(setPokemonsAC(newPokemonsData));
+//     });
+// };
 
 // sagas
-export function* fetchPokemonsWorkerSaga(): Generator<Promise<void>, void, unknown> {
+export function* fetchPokemonsWorkerSaga(): Generator<CallEffect<unknown> | PutEffect<{ readonly type: 'SET-POKEMONS', readonly pokemons: PokemonType[] }>, void, any> {
   const pokemons = yield call(getPokemons);
-  // .then((res) => {
-  //   const newPokemonsData: PokemonType[] = [];
-  //   res.data.results.forEach((pokemon, index: number) => {
-  //     newPokemonsData[index] = {
-  //       id: index + 1,
-  //       name: pokemon.name,
-  //       image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${index + 1}.svg`,
-  //     };
-  //   });
-  // });
-  yield put(setPokemonsAC(pokemons));
+  // eslint-disable-next-line no-debugger
+  debugger;
+  const newPokemonsData: PokemonType[] = [];
+  pokemons.data.results.forEach((pokemon: PokemonType, index: number) => {
+    newPokemonsData[index] = {
+      id: index + 1,
+      name: pokemon.name,
+      image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${index + 1}.svg`,
+    };
+  });
+  yield put(setPokemonsAC(newPokemonsData));
 }
 
 export const fetchPokemons = ():{ type: string } => ({ type: 'FETCH_POKEMONS' });

@@ -5,7 +5,7 @@ import createSagaMiddleware from 'redux-saga';
 import thunkMiddleware from 'redux-thunk';
 import { takeEvery } from 'redux-saga/effects';
 // eslint-disable-next-line import/no-cycle
-import pokemonReducer from './pokemonReducer';
+import pokemonReducer, { fetchPokemonsWorkerSaga } from './pokemonReducer';
 
 const rootReducer = combineReducers({
   pokemons: pokemonReducer,
@@ -26,8 +26,8 @@ export const store = createStore(rootReducer, composeEnhancers(applyMiddleware(t
 
 export type AppRootStateType = ReturnType<typeof rootReducer>;
 
-// function* rootWatcher() {
-//   yield takeEvery('FETCH_POKEMONS', fetchPokemonsWorkerSaga);
-// }
+function* rootWatcher() {
+  yield takeEvery('FETCH_POKEMONS', fetchPokemonsWorkerSaga);
+}
 
-// sagaMiddleware.run(rootWatcher);
+sagaMiddleware.run(rootWatcher);
