@@ -21,6 +21,22 @@ export type PokStateType = {
   results: null | PokemonType[];
 };
 
+type ServerPokemonType = {
+  name: string
+  url: string
+};
+
+type DataType = {
+  data: PokemonsDataType
+};
+
+type PokemonsDataType = {
+  count: number
+  next: null|string
+  previous: null|string
+  results: ServerPokemonType[]
+};
+
 const initialState: PokStateType = {
   count: null,
   next: null,
@@ -66,12 +82,15 @@ type FetchPokemonTCType = ThunkAction<void, AppRootStateType, unknown, ActionTyp
 // };
 
 // sagas
-export function* fetchPokemonsWorkerSaga(): Generator<CallEffect<unknown> | PutEffect<{ readonly type: 'SET-POKEMONS', readonly pokemons: PokemonType[] }>, void, any> {
+export function* fetchPokemonsWorkerSaga(): Generator<CallEffect<unknown> | PutEffect<{
+  readonly type: 'SET-POKEMONS';
+  readonly pokemons: PokemonType[];
+}>, void, DataType> {
   const pokemons = yield call(getPokemons);
+  const newPokemonsData: PokemonType[] = [];
   // eslint-disable-next-line no-debugger
   debugger;
-  const newPokemonsData: PokemonType[] = [];
-  pokemons.data.results.forEach((pokemon: PokemonType, index: number) => {
+  pokemons.data.results.forEach((pokemon: ServerPokemonType, index: number) => {
     newPokemonsData[index] = {
       id: index + 1,
       name: pokemon.name,
