@@ -3,10 +3,6 @@ import { getPokemons } from 'api/pokemonApi';
 import {
   call, CallEffect, put, PutEffect,
 } from '@redux-saga/core/effects';
-import { Dispatch } from 'redux';
-import { ThunkAction } from 'redux-thunk';
-// eslint-disable-next-line import/no-cycle
-import { AppRootStateType } from './store';
 
 export type PokemonType = {
   id: number;
@@ -22,19 +18,19 @@ export type PokStateType = {
 };
 
 type ServerPokemonType = {
-  name: string
-  url: string
+  name: string;
+  url: string;
 };
 
 type DataType = {
-  data: PokemonsDataType
+  data: PokemonsDataType;
 };
 
 type PokemonsDataType = {
-  count: number
-  next: null|string
-  previous: null|string
-  results: ServerPokemonType[]
+  count: number;
+  next: null | string;
+  previous: null | string;
+  results: ServerPokemonType[];
 };
 
 const initialState: PokStateType = {
@@ -49,7 +45,13 @@ type ActionType = SetPokemonsACType;
 const pokemonsReducer = (state: PokStateType = initialState, action: ActionType): PokStateType => {
   switch (action.type) {
     case 'SET-POKEMONS':
-      return { ...state, results: [...action.pokemons] };
+      return {
+        ...state,
+        count: action.count,
+        next: action.next,
+        previous: action.previous,
+        results: [...action.pokemons],
+      };
     default:
       return state;
   }
@@ -57,13 +59,23 @@ const pokemonsReducer = (state: PokStateType = initialState, action: ActionType)
 
 export type SetPokemonsACType = {
   type: 'SET-POKEMONS';
+  count: number;
+  next: string;
+  previous: string;
   pokemons: PokemonType[];
 };
 
-export const setPokemonsAC = (pokemons: PokemonType[]) => ({ type: 'SET-POKEMONS', pokemons } as const);
+export const setPokemonsAC = (
+  count: number,
+  next: string,
+  previous: string,
+  pokemons: PokemonType[],
+) => ({
+  type: 'SET-POKEMONS', next, previous, count, pokemons,
+} as const);
 
 // thunks
-type FetchPokemonTCType = ThunkAction<void, AppRootStateType, unknown, ActionType>;
+// type FetchPokemonTCType = ThunkAction<void, AppRootStateType, unknown, ActionType>;
 // export const fetchPokemonsTC = (): FetchPokemonTCType => async (
 //   dispatch: Dispatch,
 // ) => {
@@ -88,8 +100,6 @@ export function* fetchPokemonsWorkerSaga(): Generator<CallEffect<unknown> | PutE
 }>, void, DataType> {
   const pokemons = yield call(getPokemons);
   const newPokemonsData: PokemonType[] = [];
-  // eslint-disable-next-line no-debugger
-  debugger;
   pokemons.data.results.forEach((pokemon: ServerPokemonType, index: number) => {
     newPokemonsData[index] = {
       id: index + 1,
@@ -97,9 +107,14 @@ export function* fetchPokemonsWorkerSaga(): Generator<CallEffect<unknown> | PutE
       image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${index + 1}.svg`,
     };
   });
-  yield put(setPokemonsAC(newPokemonsData));
+  yield put(setPokemonsAC(
+    pokemons.data.count,
+    pokemons.data.next,
+    pokemons.data.previous,
+    newPokemonsData,
+  ));
 }
 
-export const fetchPokemons = ():{ type: string } => ({ type: 'FETCH_POKEMONS' });
+export const fetchPokemons = (): { type: string; } => ({ type: 'FETCH_POKEMONS' });
 
 export default pokemonsReducer;

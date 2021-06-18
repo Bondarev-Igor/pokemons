@@ -30,6 +30,10 @@ export const Deck: React.FC = () => {
           ))
         }
       </div>
+      <div className={styles.buttons}>
+        <button type="button">Previous</button>
+        <button type="button">Next</button>
+      </div>
     </div>
   );
 };
