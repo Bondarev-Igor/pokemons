@@ -3,6 +3,7 @@ import { getPokemons } from 'api/pokemonApi';
 import {
   call, CallEffect, put, PutEffect,
 } from '@redux-saga/core/effects';
+import axios from 'axios';
 
 export type PokemonType = {
   id: number;
@@ -74,31 +75,12 @@ export const setPokemonsAC = (
   type: 'SET-POKEMONS', next, previous, count, pokemons,
 } as const);
 
-// thunks
-// type FetchPokemonTCType = ThunkAction<void, AppRootStateType, unknown, ActionType>;
-// export const fetchPokemonsTC = (): FetchPokemonTCType => async (
-//   dispatch: Dispatch,
-// ) => {
-//   getPokemons()
-//     .then((res) => {
-//       const newPokemonsData: PokemonType[] = [];
-//       res.data.results.forEach((pokemon, index: number) => {
-//         newPokemonsData[index] = {
-//           id: index + 1,
-//           name: pokemon.name,
-//           image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${index + 1}.svg`,
-//         };
-//       });
-//       dispatch(setPokemonsAC(newPokemonsData));
-//     });
-// };
-
 // sagas
-export function* fetchPokemonsWorkerSaga(): Generator<CallEffect<unknown> | PutEffect<{
+export function* initializePokemonsWorkerSaga(): Generator<CallEffect<unknown> | PutEffect<{
   readonly type: 'SET-POKEMONS';
   readonly pokemons: PokemonType[];
 }>, void, DataType> {
-  const pokemons = yield call(getPokemons);
+  const pokemons = yield call(() => getPokemons());
   const newPokemonsData: PokemonType[] = [];
   pokemons.data.results.forEach((pokemon: ServerPokemonType, index: number) => {
     newPokemonsData[index] = {
@@ -115,6 +97,25 @@ export function* fetchPokemonsWorkerSaga(): Generator<CallEffect<unknown> | PutE
   ));
 }
 
-export const fetchPokemons = (): { type: string; } => ({ type: 'FETCH_POKEMONS' });
+export const fetchPokemons = (): { type: string; } => ({ type: 'INITIALIZE_POKEMONS' });
+
+// thunks
+// type FetchPokemonTCType = ThunkAction<void, AppRootStateType, unknown, ActionType>;
+// export const fetchPokemonsTC = (): FetchPokemonTCType => (
+//   dispatch: Dispatch,
+// ) => {
+//   getPokemons()
+//     .then((res) => {
+//       const newPokemonsData: PokemonType[] = [];
+//       res.data.results.forEach((pokemon, index: number) => {
+//         newPokemonsData[index] = {
+//           id: index + 1,
+//           name: pokemon.name,
+//           image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${index + 1}.svg`,
+//         };
+//       });
+//       dispatch(setPokemonsAC(newPokemonsData));
+//     });
+// };
 
 export default pokemonsReducer;

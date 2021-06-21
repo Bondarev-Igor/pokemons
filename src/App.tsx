@@ -8,7 +8,7 @@ const App = () => (
   <div>
     <Switch>
       <Route exact path="/" render={() => <Deck />} />
-      <Route exact path="/:pokemonId" render={(props: any) => <Card {...props} />} />
+      <Route exact path="/:id" render={(props: any) => <Card {...props} />} />
     </Switch>
   </div>
 );
