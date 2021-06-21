@@ -3,7 +3,6 @@ import { getPokemons } from 'api/pokemonApi';
 import {
   call, CallEffect, put, PutEffect,
 } from '@redux-saga/core/effects';
-import axios from 'axios';
 
 export type PokemonType = {
   id: number;
@@ -18,7 +17,7 @@ export type PokStateType = {
   results: null | PokemonType[];
 };
 
-type ServerPokemonType = {
+export type ServerPokemonType = {
   name: string;
   url: string;
 };
@@ -76,11 +75,14 @@ export const setPokemonsAC = (
 } as const);
 
 // sagas
-export function* initializePokemonsWorkerSaga(): Generator<CallEffect<unknown> | PutEffect<{
+// eslint-disable-next-line max-len
+export function* initializePokemonsWorkerSaga({ url }: any): Generator<CallEffect<unknown> | PutEffect<{
   readonly type: 'SET-POKEMONS';
   readonly pokemons: PokemonType[];
 }>, void, DataType> {
-  const pokemons = yield call(() => getPokemons());
+  // eslint-disable-next-line no-debugger
+  debugger;
+  const pokemons = yield call(() => (getPokemons(url)));
   const newPokemonsData: PokemonType[] = [];
   pokemons.data.results.forEach((pokemon: ServerPokemonType, index: number) => {
     newPokemonsData[index] = {
@@ -97,7 +99,7 @@ export function* initializePokemonsWorkerSaga(): Generator<CallEffect<unknown> |
   ));
 }
 
-export const fetchPokemons = (): { type: string; } => ({ type: 'INITIALIZE_POKEMONS' });
+export const fetchPokemons = (url: string): { type: string, url: any } => ({ type: 'INITIALIZE_POKEMONS', url });
 
 // thunks
 // type FetchPokemonTCType = ThunkAction<void, AppRootStateType, unknown, ActionType>;

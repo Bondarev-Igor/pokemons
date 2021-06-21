@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import axios from 'axios';
 import pokoLogo from '../../images/logoPok.jpg';
 
 import { fetchPokemons, PokemonType } from '../../bll/pokemonReducer';
@@ -12,22 +11,22 @@ import { Card } from '../card/Card';
 import styles from './Deck.module.scss';
 
 export const Deck: React.FC = () => {
+  const baseUrl = 'https://pokeapi.co/api/v2/pokemon/';
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchPokemons());
+    dispatch(fetchPokemons(baseUrl));
   }, [dispatch]);
 
   const pokemons = useSelector<AppRootStateType, PokemonType[]>((state) => state.pokemons.results);
   const next = useSelector<AppRootStateType, string >((state) => state.pokemons.next);
   const previous = useSelector<AppRootStateType, string>((state) => state.pokemons.previous);
 
-  const newPage = async (url: string) => {
-    // eslint-disable-next-line no-debugger
-    debugger;
-    const promise = await axios.get(`${url}`);
-    dispatch(fetchPokemons());
+  const newPage = (url: any) => {
+    dispatch(fetchPokemons(url));
   };
+
   return (
     <div className={styles.mainWrapper}>
       <div className={styles.article}>
@@ -43,8 +42,8 @@ export const Deck: React.FC = () => {
         }
       </div>
       <div className={styles.buttons}>
-        <button type="button">Previous</button>
-        <button type="button" onClick={() => newPage(next)}>Next</button>
+        <button type="button" onClick={() => { newPage(previous); }}>Previous</button>
+        <button type="button" onClick={() => { newPage(next); }}>Next</button>
       </div>
     </div>
   );
