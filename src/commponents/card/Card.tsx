@@ -1,15 +1,20 @@
+// import { fetchPokemon } from 'bll/pokReducer';
 import React from 'react';
+// import { useDispatch } from 'react-redux';
 
 import styles from './Card.module.scss';
 
 export type CardPropsType = {
   name: string;
+  url: string;
 };
 
-export const Card: React.FC<CardPropsType> = ({ name }) => (
-  // const { match } = props;
-  // const { params } = match;
-  // const { pokemonId } = params;
+export const Card: React.FC<CardPropsType> = ({ name, url }) => (
+// const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   dispatch(fetchPokemon(url));
+  // }, [dispatch, url]);
   <div className={styles.wrapperCard}>
     <div className={styles.cardPokemon}>
       {/* <div className={styles.imgPokemon}>

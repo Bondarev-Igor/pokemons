@@ -9,25 +9,18 @@ export type ServerPokemonType = {
   url: string;
 };
 
-export type PokStateType = {
+type DataType = {
+  data: PokemonsDataType;
+};
+
+type PokemonsDataType = {
   count: null | number;
   next: null | string;
   previous: null | string;
   results: null | ServerPokemonType[];
 };
 
-type DataType = {
-  data: PokemonsDataType;
-};
-
-type PokemonsDataType = {
-  count: number;
-  next: null | string;
-  previous: null | string;
-  results: ServerPokemonType[];
-};
-
-const initialState: PokStateType = {
+const initialState: PokemonsDataType = {
   count: null,
   next: null,
   previous: null,
@@ -36,9 +29,10 @@ const initialState: PokStateType = {
 
 type ActionType = SetPokemonsACType;
 
-const pokemonsReducer = (state: PokStateType = initialState, action: ActionType): PokStateType => {
+// eslint-disable-next-line max-len
+const pokemonsReducer = (state: PokemonsDataType = initialState, action: ActionType): PokemonsDataType => {
   switch (action.type) {
-    case 'SET-POKEMONS':
+    case 'SET_POKEMONS':
       return {
         ...state,
         count: action.count,
@@ -52,7 +46,7 @@ const pokemonsReducer = (state: PokStateType = initialState, action: ActionType)
 };
 
 export type SetPokemonsACType = {
-  type: 'SET-POKEMONS';
+  type: 'SET_POKEMONS';
   count: number;
   next: string;
   previous: string;
@@ -64,28 +58,34 @@ export const setPokemonsAC = (
   next: string,
   previous: string,
   pokemons: ServerPokemonType[],
-) => ({
-  type: 'SET-POKEMONS', next, previous, count, pokemons,
+): SetPokemonsACType => ({
+  type: 'SET_POKEMONS', next, previous, count, pokemons,
 } as const);
 
 // sagas
-// eslint-disable-next-line max-len
-export function* fetchPokemonsWorkerSaga({ url }: any): Generator<CallEffect<unknown> | PutEffect<{
-  readonly type: 'SET-POKEMONS';
+type ReturnFethcPokType = Generator<CallEffect<unknown> | PutEffect<{
+  readonly type: 'SET_POKEMONS';
   readonly pokemons: ServerPokemonType[];
-}>, void, DataType> {
-  // eslint-disable-next-line no-debugger
-  debugger;
-  const pokemons = yield call(() => (getPokemons(url)));
-  yield put(setPokemonsAC(
-    pokemons.data.count,
-    pokemons.data.next,
-    pokemons.data.previous,
-    pokemons.data.results,
-  ));
+}>, void, DataType>;
+export function* fetchPokemonsWorkerSaga({ startPoint, count }: any): ReturnFethcPokType {
+  try {
+    const pokemons = yield call(() => (getPokemons(startPoint, count)));
+    const temp = [...pokemons.data.results];
+    console.log(temp);
+    yield put(setPokemonsAC(
+      pokemons.data.count,
+      pokemons.data.next,
+      pokemons.data.previous,
+      pokemons.data.results,
+    ));
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-export const fetchPokemons = (url: string): { type: string, url: string } => ({ type: 'FETCH_POKEMONS', url });
+export const fetchPokemons = (
+  startPoint: number, count: number,
+): { type: string, startPoint: number, count: number; } => ({ type: 'FETCH_POKEMONS', startPoint, count });
 
 // thunks
 // type FetchPokemonTCType = ThunkAction<void, AppRootStateType, unknown, ActionType>;
