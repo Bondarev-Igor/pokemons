@@ -4,22 +4,16 @@ import {
   call, CallEffect, put, PutEffect,
 } from '@redux-saga/core/effects';
 
-export type PokemonType = {
-  id: number;
+export type ServerPokemonType = {
   name: string;
-  image: string;
+  url: string;
 };
 
 export type PokStateType = {
   count: null | number;
   next: null | string;
   previous: null | string;
-  results: null | PokemonType[];
-};
-
-export type ServerPokemonType = {
-  name: string;
-  url: string;
+  results: null | ServerPokemonType[];
 };
 
 type DataType = {
@@ -62,44 +56,36 @@ export type SetPokemonsACType = {
   count: number;
   next: string;
   previous: string;
-  pokemons: PokemonType[];
+  pokemons: ServerPokemonType[];
 };
 
 export const setPokemonsAC = (
   count: number,
   next: string,
   previous: string,
-  pokemons: PokemonType[],
+  pokemons: ServerPokemonType[],
 ) => ({
   type: 'SET-POKEMONS', next, previous, count, pokemons,
 } as const);
 
 // sagas
 // eslint-disable-next-line max-len
-export function* initializePokemonsWorkerSaga({ url }: any): Generator<CallEffect<unknown> | PutEffect<{
+export function* fetchPokemonsWorkerSaga({ url }: any): Generator<CallEffect<unknown> | PutEffect<{
   readonly type: 'SET-POKEMONS';
-  readonly pokemons: PokemonType[];
+  readonly pokemons: ServerPokemonType[];
 }>, void, DataType> {
   // eslint-disable-next-line no-debugger
   debugger;
   const pokemons = yield call(() => (getPokemons(url)));
-  const newPokemonsData: PokemonType[] = [];
-  pokemons.data.results.forEach((pokemon: ServerPokemonType, index: number) => {
-    newPokemonsData[index] = {
-      id: index + 1,
-      name: pokemon.name,
-      image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${index + 1}.svg`,
-    };
-  });
   yield put(setPokemonsAC(
     pokemons.data.count,
     pokemons.data.next,
     pokemons.data.previous,
-    newPokemonsData,
+    pokemons.data.results,
   ));
 }
 
-export const fetchPokemons = (url: string): { type: string, url: any } => ({ type: 'INITIALIZE_POKEMONS', url });
+export const fetchPokemons = (url: string): { type: string, url: string } => ({ type: 'FETCH_POKEMONS', url });
 
 // thunks
 // type FetchPokemonTCType = ThunkAction<void, AppRootStateType, unknown, ActionType>;

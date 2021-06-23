@@ -1,41 +1,42 @@
-.mainWrapper {
-  background-color:rgb(184, 186, 189);
-  width: 1440px;
-  margin: 0 auto;
-  
+.rootWrapper {
+  background-color: #EFEFBB;
 
-  .wrapperCards {
-  
-    padding-top: 25px;
+  .mainWrapper {
     margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    justify-content: center;
-  }
+    width: 1440px;
 
-  .navPok {
-    height: 115px;
-    font-family: sans-serif;
-    font-weight: bold;
-    font-size: 25px;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    margin-left: 75px;
-  }
+    .wrapperCards {
+      padding-top: 25px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      justify-content: center;
+    }
 
-  .pikachu {
-    max-width: 45%;
-    display: flex;
-    align-items: center;
-    align-content: center;
-    justify-content: center;
-    overflow: auto;
-    margin: 0 auto;
-  }
+    .navPok {
+      height: 100px;
+      font-family: sans-serif;
+      font-weight: bold;
+      font-size: 25px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      margin-left: 75px;
+    }
 
-  .buttons{
-    align-items: center;
+    .pikachu {
+      max-width: 45%;
+      display: flex;
+      align-items: center;
+      align-content: center;
+      justify-content: center;
+      overflow: auto;
+      margin: 0 auto;
+    }
+
+    .buttons {
+      align-items: center;
+    }
   }
 }
