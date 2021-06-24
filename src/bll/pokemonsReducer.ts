@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-cycle
-import { getPokemons } from 'api/pokemonApi';
+import { getPokemon, getPokemons } from 'api/pokemonApi';
 import {
   call, CallEffect, put, PutEffect,
 } from '@redux-saga/core/effects';
@@ -71,7 +71,17 @@ export function* fetchPokemonsWorkerSaga({ startPoint, count }: any): ReturnFeth
   try {
     const pokemons = yield call(() => (getPokemons(startPoint, count)));
     const temp = [...pokemons.data.results];
-    console.log(temp);
+    console.log(temp[0]);
+    const getPok = async () => {
+      const res = await getPokemon(`${temp[0].name}`);
+      console.log(res);
+    };
+    getPok();
+    // temp.forEach((el) => {
+    //   const res: any = getPokemon(`${el.name}`).then((response) => {
+    //     console.log(response);
+    //   });
+    // });
     yield put(setPokemonsAC(
       pokemons.data.count,
       pokemons.data.next,
