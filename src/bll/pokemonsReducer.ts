@@ -86,6 +86,8 @@ export function* fetchPokemonsWorkerSaga({ startPoint, count }: any): any {
     const pokemons = yield call(() => getPokemons(startPoint, count));
     const temp = [...pokemons.data.results];
     const getPok = async (item: any) => {
+      // eslint-disable-next-line no-debugger
+      debugger;
       const res = await getPokemon(item.name);
       const index = temp.findIndex((_item) => _item.url === item.url);
       temp[index] = res.data;
