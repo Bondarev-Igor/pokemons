@@ -6,10 +6,9 @@ import styles from './Card.module.scss';
 
 export type CardPropsType = {
   name: string;
-  url: string;
 };
 
-export const Card: React.FC<CardPropsType> = ({ name, url }) => (
+export const Card: React.FC<CardPropsType> = ({ name }) => (
 // const dispatch = useDispatch();
 
   // useEffect(() => {

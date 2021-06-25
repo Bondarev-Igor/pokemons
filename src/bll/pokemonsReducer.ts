@@ -4,9 +4,20 @@ import {
   call, CallEffect, put, PutEffect,
 } from '@redux-saga/core/effects';
 
+export type SimplePokType = {
+  name: string
+  url: string
+};
+
 export type ServerPokemonType = {
-  name: string;
-  url: string;
+  base_experience: number
+  height: number
+  id: number
+  name: string
+  order: number
+  sprites: string
+  types: string
+  weight: number
 };
 
 type DataType = {
@@ -38,7 +49,7 @@ const pokemonsReducer = (state: PokemonsDataType = initialState, action: ActionT
         count: action.count,
         next: action.next,
         previous: action.previous,
-        results: [...action.pokemons],
+        results: [...action.temp],
       };
     default:
       return state;
@@ -50,43 +61,42 @@ export type SetPokemonsACType = {
   count: number;
   next: string;
   previous: string;
-  pokemons: ServerPokemonType[];
+  temp: ServerPokemonType[];
 };
 
 export const setPokemonsAC = (
   count: number,
   next: string,
   previous: string,
-  pokemons: ServerPokemonType[],
-): SetPokemonsACType => ({
-  type: 'SET_POKEMONS', next, previous, count, pokemons,
+  temp: ServerPokemonType[],
+): any => ({
+  type: 'SET_POKEMONS', next, previous, count, temp,
 } as const);
 
 // sagas
 type ReturnFethcPokType = Generator<CallEffect<unknown> | PutEffect<{
   readonly type: 'SET_POKEMONS';
-  readonly pokemons: ServerPokemonType[];
+  readonly pokemons: SimplePokType[];
 }>, void, DataType>;
-export function* fetchPokemonsWorkerSaga({ startPoint, count }: any): ReturnFethcPokType {
+
+export function* fetchPokemonsWorkerSaga({ startPoint, count }: any): any {
+  // eslint-disable-next-line no-debugger
+  debugger;
   try {
-    const pokemons = yield call(() => (getPokemons(startPoint, count)));
+    const pokemons = yield call(() => getPokemons(startPoint, count));
     const temp = [...pokemons.data.results];
-    console.log(temp[0]);
-    const getPok = async () => {
-      const res = await getPokemon(`${temp[0].name}`);
-      console.log(res);
+    const getPok = async (item: any) => {
+      const res = await getPokemon(item.name);
+      const index = temp.findIndex((_item) => _item.url === item.url);
+      temp[index] = res.data;
     };
-    getPok();
-    // temp.forEach((el) => {
-    //   const res: any = getPokemon(`${el.name}`).then((response) => {
-    //     console.log(response);
-    //   });
-    // });
+    yield call(() => temp.forEach(getPok));
+    yield call(() => console.log(temp));
     yield put(setPokemonsAC(
       pokemons.data.count,
       pokemons.data.next,
       pokemons.data.previous,
-      pokemons.data.results,
+      temp,
     ));
   } catch (error) {
     console.log(error);

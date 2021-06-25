@@ -14,7 +14,3 @@ export const getPokemons = (
 export const getPokemon = (
   id: number | string,
 ): Promise<AxiosResponse<any>> => instance.get(`${id}`);
-
-export const getNewPage = (
-  url: string,
-): Promise<AxiosResponse<any>> => axios.get(url);

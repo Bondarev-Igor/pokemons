@@ -38,7 +38,7 @@ export const Deck: React.FC = () => {
           {
             pokemons.map((pok) => (
               <NavLink key={pok.name} to={`/${pok.name}`}>
-                <Card name={pok.name} url={pok.url} />
+                <Card name={pok.name} />
               </NavLink>
             ))
           }
