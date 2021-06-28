@@ -3,28 +3,32 @@ import { getPokemon, getPokemons } from 'api/pokemonApi';
 import {
   call, CallEffect, put, PutEffect,
 } from '@redux-saga/core/effects';
+import { ThunkAction } from 'redux-thunk';
+import { Dispatch } from 'redux';
+// eslint-disable-next-line import/no-cycle
+import { AppRootStateType } from './store';
 
 export type SimplePokType = {
-  name: string
-  url: string
+  name: string;
+  url: string;
 };
 
 export type ServerPokemonType = {
-  base_experience: number
-  height: number
-  id: number
-  name: string
-  order: number
-  sprites: string
-  types: string
-  weight: number
+  base_experience: number;
+  height: number;
+  id: number;
+  name: string;
+  order: number;
+  sprites: string;
+  types: string;
+  weight: number;
 };
 
 type DataType = {
   data: PokemonsDataType;
 };
 
-type PokemonsDataType = {
+export type PokemonsDataType = {
   count: null | number;
   next: null | string;
   previous: null | string;
@@ -93,13 +97,13 @@ export function* fetchPokemonsWorkerSaga({ startPoint, count }: any): any {
       temp[index] = res.data;
     };
     yield call(() => temp.forEach(getPok));
-    yield call(() => console.log(temp));
     yield put(setPokemonsAC(
       pokemons.data.count,
       pokemons.data.next,
       pokemons.data.previous,
       temp,
     ));
+    yield call(() => console.log(temp));
   } catch (error) {
     console.log(error);
   }
@@ -110,22 +114,30 @@ export const fetchPokemons = (
 ): { type: string, startPoint: number, count: number; } => ({ type: 'FETCH_POKEMONS', startPoint, count });
 
 // thunks
-// type FetchPokemonTCType = ThunkAction<void, AppRootStateType, unknown, ActionType>;
-// export const fetchPokemonsTC = (): FetchPokemonTCType => (
-//   dispatch: Dispatch,
-// ) => {
-//   getPokemons()
-//     .then((res) => {
-//       const newPokemonsData: PokemonType[] = [];
-//       res.data.results.forEach((pokemon, index: number) => {
-//         newPokemonsData[index] = {
-//           id: index + 1,
-//           name: pokemon.name,
-//           image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${index + 1}.svg`,
-//         };
-//       });
-//       dispatch(setPokemonsAC(newPokemonsData));
-//     });
-// };
+type FetchPokemonTCType = ThunkAction<void, AppRootStateType, unknown, ActionType>;
+export const fetchPokemonsTC = (startPoint: number, count: number): FetchPokemonTCType => async (
+  dispatch: Dispatch,
+) => {
+  // eslint-disable-next-line no-debugger
+  debugger;
+  const pokemons = await getPokemons(startPoint, count);
+  const temp = [...pokemons.data.results];
+  console.log(temp);
+  const getPok = async (item: any) => {
+    // // eslint-disable-next-line no-debugger
+    // debugger;
+    const res = await getPokemon(item.name);
+    const index = temp.findIndex((_item: any) => _item.url === item.url);
+    temp[index] = res.data;
+  };
+  const newPoks: any = async () => temp.map(getPok);
+  console.log(newPoks);
+  dispatch(setPokemonsAC(
+    pokemons.data.count,
+    pokemons.data.next,
+    pokemons.data.previous,
+    newPoks,
+  ));
+};
 
 export default pokemonsReducer;

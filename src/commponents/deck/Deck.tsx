@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import pokoLogo from '../../images/logoPok.jpg';
 
-import { fetchPokemons, ServerPokemonType } from '../../bll/pokemonsReducer';
+import { fetchPokemons, fetchPokemonsTC, ServerPokemonType } from '../../bll/pokemonsReducer';
 
 import { AppRootStateType } from '../../bll/store';
 import { Card } from '../card/Card';
@@ -14,7 +14,7 @@ export const Deck: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchPokemons(0, 18));
+    dispatch(fetchPokemons(0, 9));
   }, [dispatch]);
 
   // eslint-disable-next-line max-len
