@@ -14,14 +14,11 @@ export const Deck: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchPokemons(0, 9));
+    dispatch(fetchPokemons(0, 50));
   }, [dispatch]);
 
   // eslint-disable-next-line max-len
   const pokemons = useSelector<AppRootStateType, ServerPokemonType[]>((state) => state.pokemons.results);
-  const next = useSelector<AppRootStateType, string>((state) => state.pokemons.next);
-  const previous = useSelector<AppRootStateType, string>((state) => state.pokemons.previous);
-
   // const newPage = (portion: number) => {
   //   // eslint-disable-next-line no-debugger
   //   debugger;
@@ -38,7 +35,11 @@ export const Deck: React.FC = () => {
           {
             pokemons.map((pok) => (
               <NavLink key={pok.name} to={`/${pok.name}`}>
-                <Card name={pok.name} />
+                <Card
+                  name={pok.name}
+                  image={pok.sprites.other.dream_world.front_default}
+                  id={pok.id}
+                />
               </NavLink>
             ))
           }
@@ -48,8 +49,6 @@ export const Deck: React.FC = () => {
           <button type="button" onClick={() => { newPage(18); }}>Next</button>
         </div> */}
       </div>
-
     </div>
-
   );
 };

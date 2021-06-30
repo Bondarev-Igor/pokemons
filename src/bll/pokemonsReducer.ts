@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-cycle
 import { getPokemon, getPokemons } from 'api/pokemonApi';
 import {
+  all,
   call, CallEffect, put, PutEffect,
 } from '@redux-saga/core/effects';
 import { ThunkAction } from 'redux-thunk';
@@ -19,7 +20,7 @@ export type ServerPokemonType = {
   id: number;
   name: string;
   order: number;
-  sprites: string;
+  sprites: any;
   types: string;
   weight: number;
 };
@@ -73,7 +74,7 @@ export const setPokemonsAC = (
   next: string,
   previous: string,
   temp: ServerPokemonType[],
-): any => ({
+): SetPokemonsACType => ({
   type: 'SET_POKEMONS', next, previous, count, temp,
 } as const);
 
@@ -83,9 +84,9 @@ type ReturnFethcPokType = Generator<CallEffect<unknown> | PutEffect<{
   readonly pokemons: SimplePokType[];
 }>, void, DataType>;
 
-export function* fetchPokemonsWorkerSaga({ startPoint, count }: any): any {
+export function* fetchPokemonsWorkerSaga({ startPoint, count }: any): Generator<any, any, any> {
   // eslint-disable-next-line no-debugger
-  debugger;
+  // debugger;
   try {
     const pokemons = yield call(() => getPokemons(startPoint, count));
     const temp = [...pokemons.data.results];
@@ -95,15 +96,18 @@ export function* fetchPokemonsWorkerSaga({ startPoint, count }: any): any {
       const res = await getPokemon(item.name);
       const index = temp.findIndex((_item) => _item.url === item.url);
       temp[index] = res.data;
+      // return temp[index];
     };
-    yield call(() => temp.forEach(getPok));
+    // console.log(yield call(() => getPok(temp[0])));
+    // console.log(yield call(() => getPok(temp[1])));
+    // console.log(yield call(() => getPok(temp[2])));
+    yield all(temp.map((el) => call(getPok, el)));
     yield put(setPokemonsAC(
       pokemons.data.count,
       pokemons.data.next,
       pokemons.data.previous,
       temp,
     ));
-    yield call(() => console.log(temp));
   } catch (error) {
     console.log(error);
   }
