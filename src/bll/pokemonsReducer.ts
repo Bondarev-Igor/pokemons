@@ -1,17 +1,32 @@
 // eslint-disable-next-line import/no-cycle
 import { getPokemon, getPokemons } from 'api/pokemonApi';
 import {
-  all,
-  call, CallEffect, put, PutEffect,
+  all, call, CallEffect, put, PutEffect,
 } from '@redux-saga/core/effects';
-import { ThunkAction } from 'redux-thunk';
-import { Dispatch } from 'redux';
-// eslint-disable-next-line import/no-cycle
-import { AppRootStateType } from './store';
 
 export type SimplePokType = {
   name: string;
   url: string;
+};
+
+type SpritesType = {
+  back_default: null|string
+  back_female: null|string
+  back_shiny: null|string
+  back_shiny_female: null|string
+  front_default: null|string
+  front_female: null|string
+  front_shiny: null|string
+  front_shiny_female: null|string
+  other: {
+    dream_world: {
+      front_default: null|string
+      front_female: null|string
+    }
+    ['official-artwork']: {
+      front_default: null|string
+    }
+  }
 };
 
 export type ServerPokemonType = {
@@ -20,7 +35,7 @@ export type ServerPokemonType = {
   id: number;
   name: string;
   order: number;
-  sprites: any;
+  sprites: SpritesType;
   types: string;
   weight: number;
 };
@@ -81,26 +96,23 @@ export const setPokemonsAC = (
 // sagas
 type ReturnFethcPokType = Generator<CallEffect<unknown> | PutEffect<{
   readonly type: 'SET_POKEMONS';
-  readonly pokemons: SimplePokType[];
+  readonly temp: SetPokemonsACType;
 }>, void, DataType>;
 
-export function* fetchPokemonsWorkerSaga({ startPoint, count }: any): Generator<any, any, any> {
+export function* fetchPokemonsWorkerSaga({ startPoint, count }: any): any {
   // eslint-disable-next-line no-debugger
-  // debugger;
+  debugger;
   try {
     const pokemons = yield call(() => getPokemons(startPoint, count));
     const temp = [...pokemons.data.results];
-    const getPok = async (item: any) => {
+    const getPok = async (item: SimplePokType) => {
       // eslint-disable-next-line no-debugger
       debugger;
       const res = await getPokemon(item.name);
       const index = temp.findIndex((_item) => _item.url === item.url);
       temp[index] = res.data;
-      // return temp[index];
     };
-    // console.log(yield call(() => getPok(temp[0])));
-    // console.log(yield call(() => getPok(temp[1])));
-    // console.log(yield call(() => getPok(temp[2])));
+
     yield all(temp.map((el) => call(getPok, el)));
     yield put(setPokemonsAC(
       pokemons.data.count,
@@ -109,6 +121,7 @@ export function* fetchPokemonsWorkerSaga({ startPoint, count }: any): Generator<
       temp,
     ));
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.log(error);
   }
 }
@@ -118,30 +131,26 @@ export const fetchPokemons = (
 ): { type: string, startPoint: number, count: number; } => ({ type: 'FETCH_POKEMONS', startPoint, count });
 
 // thunks
-type FetchPokemonTCType = ThunkAction<void, AppRootStateType, unknown, ActionType>;
-export const fetchPokemonsTC = (startPoint: number, count: number): FetchPokemonTCType => async (
-  dispatch: Dispatch,
-) => {
-  // eslint-disable-next-line no-debugger
-  debugger;
-  const pokemons = await getPokemons(startPoint, count);
-  const temp = [...pokemons.data.results];
-  console.log(temp);
-  const getPok = async (item: any) => {
-    // // eslint-disable-next-line no-debugger
-    // debugger;
-    const res = await getPokemon(item.name);
-    const index = temp.findIndex((_item: any) => _item.url === item.url);
-    temp[index] = res.data;
-  };
-  const newPoks: any = async () => temp.map(getPok);
-  console.log(newPoks);
-  dispatch(setPokemonsAC(
-    pokemons.data.count,
-    pokemons.data.next,
-    pokemons.data.previous,
-    newPoks,
-  ));
-};
+// type FetchPokemonTCType = ThunkAction<void, AppRootStateType, unknown, ActionType>;
+// export const fetchPokemonsTC = (startPoint: number, count: number): FetchPokemonTCType => async (
+//   dispatch: Dispatch,
+// ) => {
+//   const pokemons = await getPokemons(startPoint, count);
+//   const temp = [...pokemons.data.results];
+//   const getPok = async (item: any) => {
+//     // // eslint-disable-next-line no-debugger
+//     // debugger;
+//     const res = await getPokemon(item.name);
+//     const index = temp.findIndex((_item: any) => _item.url === item.url);
+//     temp[index] = res.data;
+//   };
+//   const newPoks: any = async () => temp.map(getPok);
+//   dispatch(setPokemonsAC(
+//     pokemons.data.count,
+//     pokemons.data.next,
+//     pokemons.data.previous,
+//     newPoks,
+//   ));
+// };
 
 export default pokemonsReducer;

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import pokoLogo from '../../images/logoPok.jpg';
 
-import { fetchPokemons, fetchPokemonsTC, ServerPokemonType } from '../../bll/pokemonsReducer';
+import { fetchPokemons, ServerPokemonType } from '../../bll/pokemonsReducer';
 
 import { AppRootStateType } from '../../bll/store';
 import { Card } from '../card/Card';
@@ -14,11 +14,12 @@ export const Deck: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchPokemons(0, 50));
+    dispatch(fetchPokemons(0, 18));
   }, [dispatch]);
 
-  // eslint-disable-next-line max-len
-  const pokemons = useSelector<AppRootStateType, ServerPokemonType[]>((state) => state.pokemons.results);
+  const pokemons = useSelector<AppRootStateType, ServerPokemonType[]>(
+    (state) => state.pokemons.results,
+  );
   // const newPage = (portion: number) => {
   //   // eslint-disable-next-line no-debugger
   //   debugger;
@@ -37,7 +38,7 @@ export const Deck: React.FC = () => {
               <NavLink key={pok.name} to={`/${pok.name}`}>
                 <Card
                   name={pok.name}
-                  image={pok.sprites.other.dream_world.front_default}
+                  image={pok.sprites?.other['official-artwork'].front_default}
                   id={pok.id}
                 />
               </NavLink>
