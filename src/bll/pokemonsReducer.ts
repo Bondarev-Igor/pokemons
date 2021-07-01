@@ -29,6 +29,14 @@ type SpritesType = {
   }
 };
 
+type TypePokemon = {
+  slot: number,
+  type: {
+    name: string
+    url: string
+  },
+};
+
 export type ServerPokemonType = {
   base_experience: number;
   height: number;
@@ -36,7 +44,7 @@ export type ServerPokemonType = {
   name: string;
   order: number;
   sprites: SpritesType;
-  types: string;
+  types: TypePokemon[];
   weight: number;
 };
 

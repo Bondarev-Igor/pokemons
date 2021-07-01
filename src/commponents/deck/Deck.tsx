@@ -35,11 +35,12 @@ export const Deck: React.FC = () => {
         <div className={styles.wrapperCards}>
           {
             pokemons.map((pok) => (
-              <NavLink key={pok.name} to={`/${pok.name}`}>
+              <NavLink key={pok.name} to={`/${pok.name}`} style={{ textDecoration: 'none' }}>
                 <Card
-                  name={pok.name}
                   image={pok.sprites?.other['official-artwork'].front_default}
                   id={pok.id}
+                  name={pok.name}
+                  type={pok.types[0].type.name}
                 />
               </NavLink>
             ))

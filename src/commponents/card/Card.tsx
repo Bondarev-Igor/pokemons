@@ -6,9 +6,12 @@ export type CardPropsType = {
   name: string;
   image: string;
   id: number;
+  type: string;
 };
 
-export const Card: React.FC<CardPropsType> = ({ name, image, id }) => (
+export const Card: React.FC<CardPropsType> = ({
+  name, image, id, type,
+}) => (
 
   <div className={styles.wrapperCard}>
     <div className={styles.cardPokemon}>
@@ -22,6 +25,10 @@ export const Card: React.FC<CardPropsType> = ({ name, image, id }) => (
         </span>
         <span>{name}</span>
       </div>
+      <small className={styles.type}>
+        Type:
+        <span>{type}</span>
+      </small>
     </div>
   </div>
 );

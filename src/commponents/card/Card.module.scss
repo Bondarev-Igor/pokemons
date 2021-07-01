@@ -3,25 +3,31 @@
 .wrapperCard {
   display: flex;
   flex-direction: column;
-
   padding: 15px;
 
   .cardPokemon {
     width: 190px;
     height: 260px;
     background-color: $colorCard;
+    border-radius: 20px;
 
     .imgPokemon {
       display: flex;
       align-items: center;
       overflow: hidden;
       padding: 12px;
-      height: 210px;
+      margin-top: 20%;
+      margin-bottom: 5%;
       background-color: $imgColor;
+      border-radius: 50%;
+    }
+
+    .imgPokemon:hover {
+      cursor: pointer;
     }
 
     .picOfPokemon {
-      width: 100%;
+      width: 90%;
       transition: all 1s ease-out;
       -moz-transition: all 1s ease-out;
       -o-transition: all 1s ease-out;
