@@ -14,12 +14,13 @@ export const Deck: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchPokemons(0, 18));
+    dispatch(fetchPokemons(0, 50));
   }, [dispatch]);
 
   const pokemons = useSelector<AppRootStateType, ServerPokemonType[]>(
     (state) => state.pokemons.results,
   );
+
   // const newPage = (portion: number) => {
   //   // eslint-disable-next-line no-debugger
   //   debugger;
