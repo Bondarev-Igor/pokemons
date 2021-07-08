@@ -34,8 +34,6 @@ export const Card: React.FC<CardPropsType> = ({
   };
   const mainTypes = Object.keys(colors);
   const pokType = mainTypes.find((el) => el === type);
-  // eslint-disable-next-line no-console
-  console.log(pokType);
   const color: string = colors[pokType];
 
   return (

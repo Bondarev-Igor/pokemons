@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import { paginationAC, PaginationType } from 'bll/paginationReducer';
 import pokoLogo from '../../images/logoPok.jpg';
 
 import { fetchPokemons, ServerPokemonType } from '../../bll/pokemonsReducer';
@@ -13,19 +14,26 @@ import styles from './Deck.module.scss';
 export const Deck: React.FC = () => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchPokemons(0, 50));
-  }, [dispatch]);
-
   const pokemons = useSelector<AppRootStateType, ServerPokemonType[]>(
     (state) => state.pokemons.results,
   );
+  const pagination = useSelector<AppRootStateType, PaginationType>(
+    (state) => state.pagination,
+  );
+  useEffect(() => {
+    dispatch(fetchPokemons(pagination.startPoint, pagination.count));
+  }, [dispatch, pagination.count, pagination.startPoint]);
 
-  // const newPage = (portion: number) => {
-  //   // eslint-disable-next-line no-debugger
-  //   debugger;
-  //   dispatch(fetchPokemons(0 + portion, 18));
-  // };
+  const nextPage = () => {
+    // eslint-disable-next-line no-debugger
+    debugger;
+    dispatch(paginationAC(pagination.startPoint + 12, pagination.count));
+  };
+  const previousPage = () => {
+    // eslint-disable-next-line no-debugger
+    debugger;
+    dispatch(paginationAC(pagination.startPoint - pagination.count, pagination.count));
+  };
 
   return (
     <div className={styles.rootWrapper}>
@@ -47,10 +55,10 @@ export const Deck: React.FC = () => {
             ))
           }
         </div>
-        {/* <div className={styles.buttons}>
-          <button type="button" onClick={() => { newPage(-18); }}>Previous</button>
-          <button type="button" onClick={() => { newPage(18); }}>Next</button>
-        </div> */}
+        <div className={styles.buttons}>
+          <button type="button" onClick={previousPage}>Previous</button>
+          <button type="button" onClick={() => { nextPage(); }}>Next</button>
+        </div>
       </div>
     </div>
   );

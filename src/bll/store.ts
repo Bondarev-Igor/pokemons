@@ -6,11 +6,12 @@ import thunkMiddleware from 'redux-thunk';
 import { takeEvery } from 'redux-saga/effects';
 // eslint-disable-next-line import/no-cycle
 import pokemonsReducer, { fetchPokemonsWorkerSaga } from './pokemonsReducer';
+import paginationReducer from './paginationReducer';
 // import pokReducer, { fetchPokemonWorkerSaga } from './pokReducer';
 
 const rootReducer = combineReducers({
-  // pokemon: pokReducer,
   pokemons: pokemonsReducer,
+  pagination: paginationReducer,
 });
 
 declare global {
