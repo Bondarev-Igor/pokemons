@@ -17,6 +17,9 @@ export const Deck: React.FC = () => {
   const pokemons = useSelector<AppRootStateType, ServerPokemonType[]>(
     (state) => state.pokemons.results,
   );
+  const countPokemons = useSelector<AppRootStateType, number>(
+    (state) => state.pokemons.count,
+  );
   const pagination = useSelector<AppRootStateType, PaginationType>(
     (state) => state.pagination,
   );
@@ -25,20 +28,16 @@ export const Deck: React.FC = () => {
   }, [dispatch, pagination.count, pagination.startPoint]);
 
   const nextPage = () => {
-    // eslint-disable-next-line no-debugger
-    debugger;
-    dispatch(paginationAC(pagination.startPoint + 12, pagination.count));
+    dispatch(paginationAC(pagination.startPoint + pagination.count, pagination.count));
   };
   const previousPage = () => {
-    // eslint-disable-next-line no-debugger
-    debugger;
     dispatch(paginationAC(pagination.startPoint - pagination.count, pagination.count));
   };
 
   return (
     <div className={styles.rootWrapper}>
       <div className={styles.mainWrapper}>
-        <div className={styles.article}>
+        <div className={styles.logo}>
           <img className={styles.pikachu} src={pokoLogo} alt="logo" />
         </div>
         <div className={styles.wrapperCards}>
@@ -55,9 +54,9 @@ export const Deck: React.FC = () => {
             ))
           }
         </div>
-        <div className={styles.buttons}>
-          <button type="button" onClick={previousPage}>Previous</button>
-          <button type="button" onClick={() => { nextPage(); }}>Next</button>
+        <div className={styles.blockButtons}>
+          <button className={styles.button} type="button" disabled={pagination.startPoint === 0} onClick={previousPage}>Previous</button>
+          <button className={styles.button} type="button" onClick={nextPage}>Next</button>
         </div>
       </div>
     </div>

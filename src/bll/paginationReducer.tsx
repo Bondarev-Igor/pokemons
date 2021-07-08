@@ -29,8 +29,8 @@ type PaginationACType = {
 };
 
 export const paginationAC = (
-  count: number,
   startPoint: number,
+  count: number,
 ): PaginationACType => ({
   type: 'GET_POKEMONS', startPoint, count,
 } as const);
